@@ -1,0 +1,26 @@
+map = |f, v| if (len(v) == 0) {
+    []
+} else {
+    h = head(v);
+    [f(h)] + map(f, tail(v))
+}
+
+reduce = |f, init, v| if (len(v) == 0) {
+    init
+} else {
+    i = f(init, head(v));
+    reduce(f, i, tail(v))
+}
+
+double = map(|x| x * 2)
+sum = reduce(|a, b| a + b, 0)
+prod = reduce(|a, b| a * b, 1)
+
+a = double([1, 2, 3, 4, 5])
+map(print, a)
+
+a = sum([1, 2, 3, 4, 5])
+print(a)
+
+a = prod([1, 2, 3, 4, 5])
+print(a)

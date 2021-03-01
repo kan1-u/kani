@@ -1,0 +1,32 @@
+#[doc(hidden)]
+#[macro_export]
+macro_rules! impl_from_enum {
+    ($e:tt::$t:tt, $f:ty) => {
+        impl From<$f> for $e {
+            fn from(expression: $f) -> Self {
+                Self::$t(expression)
+            }
+        }
+    };
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! impl_deref {
+    ($ty:ty, $ta:ty) => {
+        impl std::ops::Deref for $ty {
+            type Target = $ta;
+            fn deref(&self) -> &Self::Target {
+                &self.0
+            }
+        }
+    };
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! verify_token {
+    ($( $pattern:pat )|+ $( if $guard: expr )? $(,)?) => {
+        $crate::nom::combinator::verify($crate::lexer::token, |t| matches!(t, $( $pattern )|+ $( if $guard )?))
+    }
+}

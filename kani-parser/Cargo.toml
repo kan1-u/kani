@@ -1,0 +1,8 @@
+[package]
+name = "kani-parser"
+version = "0.1.0"
+authors = ["YLStax <kan1.921017@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+nom = "6.1.0"

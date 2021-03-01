@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "kani-parser",
+    "kani-evaluator",
+    "kani-cmd",
+    "kani-repl",
+]

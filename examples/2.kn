@@ -1,0 +1,11 @@
+map = |f, v| if len(v) == 0 [] else [f(head(v))] + map(f, tail(v))
+
+people = [{"name": "Sato", "age": 20}, {"name": "Suzuki", "age": 21}]
+name = |p| p["name"]
+age = |p| p["age"]
+
+a = map(name, people)
+print(a)
+
+a = map(age)(people)
+print(a)

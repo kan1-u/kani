@@ -1,0 +1,11 @@
+map = |f, v| if len(v) == 0 [] else [f(head(v))] + map(f, tail(v))
+range = |a, b| if a == b { [b] } else range(a, b - 1) + [b]
+
+fizzbuzz = |x| {
+    if (x % 3 == 0) if (x % 5 == 0) return "FizzBuzz";
+    if (x % 3 == 0) return "Fizz";
+    if (x % 5 == 0) return "Buzz";
+    x
+}
+
+print(map(fizzbuzz, range(1, 15)))
