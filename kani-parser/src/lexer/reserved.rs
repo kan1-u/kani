@@ -1,4 +1,4 @@
-use super::{Else, If, Return};
+use super::{Else, If, Return, Then};
 use crate::alias::Bool;
 use nom::bytes::complete::tag;
 use nom::combinator::value;
@@ -10,6 +10,10 @@ pub fn return_(input: &str) -> IResult<&str, Return> {
 
 pub fn if_(input: &str) -> IResult<&str, If> {
     value(If, tag("if"))(input)
+}
+
+pub fn then(input: &str) -> IResult<&str, Then> {
+    value(Then, tag("then"))(input)
 }
 
 pub fn else_(input: &str) -> IResult<&str, Else> {
@@ -32,6 +36,7 @@ mod tests {
     fn reserved_test() {
         assert_eq!(return_("return;"), Ok((";", Return)));
         assert_eq!(if_("if;"), Ok((";", If)));
+        assert_eq!(then("then;"), Ok((";", Then)));
         assert_eq!(else_("else;"), Ok((";", Else)));
         assert_eq!(true_("true;"), Ok((";", true)));
         assert_eq!(false_("false;"), Ok((";", false)));

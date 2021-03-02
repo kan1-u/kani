@@ -1,4 +1,4 @@
-map = |f, v| if len(v) == 0 [] else [f(head(v))] + map(f, tail(v))
+map = |f, v| if len(v) == 0 then [] else [f(head(v))] + map(f, tail(v))
 
 people = [{"name": "Sato", "age": 20}, {"name": "Suzuki", "age": 21}]
 name = |p| p["name"]

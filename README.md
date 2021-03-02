@@ -88,19 +88,21 @@ assert_eq!(program("add(1)(2)"), Ok(("", add)));
 ## Examples
 
 ```
-map = |f, v| if (len(v) == 0) {
-    []
-} else {
-    h = head(v);
-    [f(h)] + map(f, tail(v))
-}
+map = |f, v|
+    if (len(v) == 0)
+        then []
+        else {
+            h = head(v);
+            [f(h)] + map(f, tail(v))
+        }
 
-reduce = |f, init, v| if (len(v) == 0) {
-    init
-} else {
-    i = f(init, head(v));
-    reduce(f, i, tail(v))
-}
+reduce = |f, init, v|
+    if (len(v) == 0)
+        then init
+        else {
+            i = f(init, head(v));
+            reduce(f, i, tail(v))
+        }
 
 double = map(|x| x * 2)
 sum = reduce(|a, b| a + b, 0)
@@ -117,7 +119,7 @@ print(a)
 ```
 
 ```
-map = |f, v| if len(v) == 0 [] else [f(head(v))] + map(f, tail(v))
+map = |f, v| if len(v) == 0 then [] else [f(head(v))] + map(f, tail(v))
 
 people = [{"name": "Sato", "age": 20}, {"name": "Suzuki", "age": 21}]
 name = |p| p["name"]
@@ -131,13 +133,13 @@ print(a)
 ```
 
 ```
-map = |f, v| if len(v) == 0 [] else [f(head(v))] + map(f, tail(v))
-range = |a, b| if a == b { [b] } else range(a, b - 1) + [b]
+map = |f, v| if len(v) == 0 then [] else [f(head(v))] + map(f, tail(v))
+range = |a, b| if a == b then [b] else range(a, b - 1) + [b]
 
 fizzbuzz = |x| {
-    if (x % 3 == 0) if (x % 5 == 0) return "FizzBuzz";
-    if (x % 3 == 0) return "Fizz";
-    if (x % 5 == 0) return "Buzz";
+    if (x % 3 == 0) then if (x % 5 == 0) then return "FizzBuzz"
+    if (x % 3 == 0) then return "Fizz"
+    if (x % 5 == 0) then return "Buzz"
     x
 }
 

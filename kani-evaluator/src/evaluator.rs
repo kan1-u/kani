@@ -34,7 +34,7 @@ pub fn eval_expressions(expressions: &[Expression], env: &Rc<RefCell<Environment
 
 pub fn eval_expression(expression: Expression, env: &Rc<RefCell<Environment>>) -> Object {
     match expression {
-        Expression::Block(Block(b)) => eval_expressions(&b, env),
+        Expression::Block(b) => eval_block(b, env),
         Expression::Assign(a) => eval_assign(a, env),
         Expression::Return(r) => eval_return(r, env),
         Expression::Identifier(i) => eval_identifier(i, env),
@@ -47,6 +47,11 @@ pub fn eval_expression(expression: Expression, env: &Rc<RefCell<Environment>>) -
         Expression::Array(e) => eval_array(e, env),
         Expression::Hash(h) => eval_hash(h, env),
     }
+}
+
+fn eval_block(Block(block): Block, env: &Rc<RefCell<Environment>>) -> Object {
+    let child = Environment::from(Rc::clone(env));
+    eval_expressions(&block, &Rc::new(RefCell::new(child)))
 }
 
 fn eval_assign(
@@ -183,14 +188,14 @@ fn eval_call(expression: Expression, arg: Argument, env: &Rc<RefCell<Environment
 }
 
 fn eval_function_call(arg: Argument, function: Function, env: &Rc<RefCell<Environment>>) -> Object {
-    let mut tmp = Environment::from(Rc::clone(&function.env));
+    let mut child = Environment::from(Rc::clone(&function.env));
     if let Some(arg) = &*arg {
         let arg = eval_expression(*arg.clone(), env);
         if let Some(Identifier(name)) = function.param {
-            tmp.set(&name, arg);
+            child.set(&name, arg);
         }
     }
-    let object = eval_expression(function.body, &Rc::new(RefCell::new(tmp)));
+    let object = eval_expression(function.body, &Rc::new(RefCell::new(child)));
     object.returned()
 }
 

@@ -1,6 +1,6 @@
 use super::{
-    Assign, Divide, Equal, GreaterThan, GreaterThanEqual, LessThan, LessThanEqual, Minus, Multiply,
-    Not, NotEqual, Plus, Rem,
+    Assign, At, Divide, Dollar, Equal, GreaterThan, GreaterThanEqual, LessThan, LessThanEqual,
+    Minus, Multiply, Not, NotEqual, Plus, Rem,
 };
 use nom::bytes::complete::tag;
 use nom::combinator::value;
@@ -58,6 +58,14 @@ pub fn less_than(input: &str) -> IResult<&str, LessThan> {
     value(LessThan, tag("<"))(input)
 }
 
+pub fn at(input: &str) -> IResult<&str, At> {
+    value(At, tag("@"))(input)
+}
+
+pub fn dollar(input: &str) -> IResult<&str, Dollar> {
+    value(Dollar, tag("$"))(input)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -77,5 +85,7 @@ mod tests {
         assert_eq!(less_than_equal("<=;"), Ok((";", LessThanEqual)));
         assert_eq!(greater_than(">;"), Ok((";", GreaterThan)));
         assert_eq!(less_than("<;"), Ok((";", LessThan)));
+        assert_eq!(at("@;"), Ok((";", At)));
+        assert_eq!(dollar("$;"), Ok((";", Dollar)));
     }
 }

@@ -52,6 +52,8 @@ fn operator_token(input: &str) -> IResult<&str, Token> {
         into(less_than_equal),
         into(greater_than),
         into(less_than),
+        into(at),
+        into(dollar),
     ))(input)
 }
 
@@ -79,6 +81,7 @@ fn reserved_token(input: &str) -> IResult<&str, Token> {
     alt((
         into(return_),
         into(if_),
+        into(then),
         into(else_),
         into(true_),
         into(false_),
@@ -148,6 +151,8 @@ mod tests {
         assert_eq!(token("<="), Ok(("", LessThanEqual.into())));
         assert_eq!(token(">"), Ok(("", GreaterThan.into())));
         assert_eq!(token("<"), Ok(("", LessThan.into())));
+        assert_eq!(token("@"), Ok(("", At.into())));
+        assert_eq!(token("$"), Ok(("", Dollar.into())));
     }
 
     #[test]
@@ -169,6 +174,7 @@ mod tests {
     fn reserved_test() {
         assert_eq!(token("return"), Ok(("", Return.into())));
         assert_eq!(token("if"), Ok(("", If.into())));
+        assert_eq!(token("then"), Ok(("", Then.into())));
         assert_eq!(token("else"), Ok(("", Else.into())));
         assert_eq!(token("true"), Ok(("", true.into())));
         assert_eq!(token("false"), Ok(("", false.into())));

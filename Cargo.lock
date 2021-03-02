@@ -136,7 +136,7 @@ dependencies = [
 
 [[package]]
 name = "kani-cmd"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "clap",
  "kani-evaluator",
@@ -144,21 +144,21 @@ dependencies = [
 
 [[package]]
 name = "kani-evaluator"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "kani-parser",
 ]
 
 [[package]]
 name = "kani-parser"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "nom",
 ]
 
 [[package]]
 name = "kani-repl"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "kani-evaluator",
  "rustyline",

@@ -2,12 +2,13 @@ mod expression;
 
 use crate::ast::Expression;
 pub use expression::expression;
+use expression::root;
 use nom::combinator::all_consuming;
 use nom::multi::many0;
 use nom::IResult;
 
 pub fn program(input: &str) -> IResult<&str, Vec<Expression>> {
-    all_consuming(many0(expression))(input)
+    all_consuming(many0(root))(input)
 }
 
 #[cfg(test)]

@@ -4,12 +4,16 @@ use crate::token::Token;
 use crate::verify_token;
 use nom::branch::alt;
 use nom::combinator::{into, map, map_opt, opt};
-use nom::multi::separated_list0;
-use nom::sequence::{delimited, preceded, separated_pair, tuple};
+use nom::multi::{many0, separated_list0};
+use nom::sequence::{delimited, preceded, separated_pair, terminated, tuple};
 use nom::IResult;
 
 pub fn expression(input: &str) -> IResult<&str, Expression> {
     pratt(Precedence::Lowest)(input)
+}
+
+pub fn root(input: &str) -> IResult<&str, Expression> {
+    terminated(expression, opt(verify_token!(Token::SemiColon(_))))(input)
 }
 
 fn expressions(input: &str) -> IResult<&str, Vec<Expression>> {
@@ -151,13 +155,13 @@ fn identifier(input: &str) -> IResult<&str, Identifier> {
 }
 
 fn prefix(input: &str) -> IResult<&str, Prefix> {
-    let (input, operator) = map_opt(token, |t| match t {
-        Token::Plus(_) => Some(PrefixOperator::Plus),
-        Token::Minus(_) => Some(PrefixOperator::Minus),
-        Token::Not(_) => Some(PrefixOperator::Not),
+    let (input, (operator, precedence)) = map_opt(token, |t| match t {
+        Token::Plus(_) => Some((PrefixOperator::Plus, Precedence::Prefix)),
+        Token::Minus(_) => Some((PrefixOperator::Minus, Precedence::Prefix)),
+        Token::Not(_) => Some((PrefixOperator::Not, Precedence::Prefix)),
         _ => None,
     })(input)?;
-    let (input, expression) = atom(input)?;
+    let (input, expression) = pratt(precedence)(input)?;
     Ok((input, Prefix::new(operator, expression)))
 }
 
@@ -208,10 +212,11 @@ fn if_(input: &str) -> IResult<&str, If> {
         tuple((
             verify_token!(Token::If(_)),
             expression,
+            verify_token!(Token::Then(_)),
             expression,
             opt(preceded(verify_token!(Token::Else(_)), expression)),
         )),
-        |(_, expr, block, _else)| If::new(expr, Box::new(block), _else.map(|e| e.into())),
+        |(_, cond, _, cons, alt)| If::new(cond, Box::new(cons), alt.map(|e| e.into())),
     )(input)
 }
 
@@ -223,15 +228,15 @@ fn function(input: &str) -> IResult<&str, Function> {
             verify_token!(Token::Pipe(_)),
             expression,
         )),
-        |(_, expr, _, block)| Function::currying(&expr, Box::new(block)),
+        |(_, params, _, body)| Function::currying(&params, Box::new(body)),
     )(input)
 }
 
-pub fn block(input: &str) -> IResult<&str, Block> {
+fn block(input: &str) -> IResult<&str, Block> {
     map(
         delimited(
             verify_token!(Token::LBrace(_)),
-            separated_list0(verify_token!(Token::SemiColon(_)), expression),
+            many0(root),
             verify_token!(Token::RBrace(_)),
         ),
         |x| Block(x),

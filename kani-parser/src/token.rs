@@ -22,6 +22,8 @@ pub enum Token {
     LessThanEqual(LessThanEqual),
     GreaterThan(GreaterThan),
     LessThan(LessThan),
+    At(At),
+    Dollar(Dollar),
     Comma(Comma),
     SemiColon(SemiColon),
     Colon(Colon),
@@ -35,6 +37,7 @@ pub enum Token {
     RBracket(RBracket),
     Return(Return),
     If(If),
+    Then(Then),
     Else(Else),
 }
 
@@ -69,6 +72,10 @@ pub struct GreaterThan;
 #[derive(Debug, Clone, PartialEq)]
 pub struct LessThan;
 #[derive(Debug, Clone, PartialEq)]
+pub struct At;
+#[derive(Debug, Clone, PartialEq)]
+pub struct Dollar;
+#[derive(Debug, Clone, PartialEq)]
 pub struct Comma;
 #[derive(Debug, Clone, PartialEq)]
 pub struct SemiColon;
@@ -95,6 +102,8 @@ pub struct Return;
 #[derive(Debug, Clone, PartialEq)]
 pub struct If;
 #[derive(Debug, Clone, PartialEq)]
+pub struct Then;
+#[derive(Debug, Clone, PartialEq)]
 pub struct Else;
 
 impl_from_enum!(Token::Illegal, Illegal);
@@ -116,6 +125,8 @@ impl_from_enum!(Token::GreaterThanEqual, GreaterThanEqual);
 impl_from_enum!(Token::LessThanEqual, LessThanEqual);
 impl_from_enum!(Token::GreaterThan, GreaterThan);
 impl_from_enum!(Token::LessThan, LessThan);
+impl_from_enum!(Token::At, At);
+impl_from_enum!(Token::Dollar, Dollar);
 impl_from_enum!(Token::Comma, Comma);
 impl_from_enum!(Token::SemiColon, SemiColon);
 impl_from_enum!(Token::Colon, Colon);
@@ -129,6 +140,7 @@ impl_from_enum!(Token::LBracket, LBracket);
 impl_from_enum!(Token::RBracket, RBracket);
 impl_from_enum!(Token::Return, Return);
 impl_from_enum!(Token::If, If);
+impl_from_enum!(Token::Then, Then);
 impl_from_enum!(Token::Else, Else);
 
 impl_deref!(Identifier, String);

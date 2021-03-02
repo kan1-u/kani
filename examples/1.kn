@@ -1,16 +1,18 @@
-map = |f, v| if (len(v) == 0) {
-    []
-} else {
-    h = head(v);
-    [f(h)] + map(f, tail(v))
-}
+map = |f, v|
+    if (len(v) == 0)
+        then []
+        else {
+            h = head(v);
+            [f(h)] + map(f, tail(v))
+        }
 
-reduce = |f, init, v| if (len(v) == 0) {
-    init
-} else {
-    i = f(init, head(v));
-    reduce(f, i, tail(v))
-}
+reduce = |f, init, v|
+    if (len(v) == 0)
+        then init
+        else {
+            i = f(init, head(v));
+            reduce(f, i, tail(v))
+        }
 
 double = map(|x| x * 2)
 sum = reduce(|a, b| a + b, 0)
